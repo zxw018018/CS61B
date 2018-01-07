@@ -12,6 +12,105 @@ package list;
 
 public class DList {
 
+  public static void main(String[] args) {
+    System.out.println("*Create an empty list");
+    DList a = new DList();
+    System.out.println("Check if it is empty? "+ a.isEmpty());
+    System.out.println("Check the size of list: " + a.length());
+    System.out.println("Get the head address: " + a.head);    
+    System.out.println("****************************************************");
+    a.insertFront(3);
+    System.out.println("*Insert 3 to the front");
+    System.out.println("Check if it is empty? " + a.isEmpty());
+    System.out.println("Check the size of list: " + a.length());
+    System.out.println("Get the head address: " + a.head);
+    System.out.println("Check head's prev item: " + a.head.prev.item);
+    System.out.println("Check head's next item: " + a.head.next.item);
+    a.insertFront(2);
+    a.insertFront(1);
+    System.out.println("****************************************************");
+    System.out.println(a.head.next.item);
+    System.out.println(a.head.next.next.item);
+    System.out.println(a.head.next.next.next.item);
+    System.out.println(a.head.next.next.next.next.item);
+    System.out.println(a.head.next.next.next.next.next.item);
+    System.out.println(a.head.prev.item);
+    System.out.println(a.head.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.prev.prev.item);
+    System.out.println("Size is: " + a.length());
+    System.out.println("****************************************************");
+    a.insertBack(4);
+    a.insertBack(5);
+    System.out.println(a.head.next.item);
+    System.out.println(a.head.next.next.item);
+    System.out.println(a.head.next.next.next.item);
+    System.out.println(a.head.next.next.next.next.item);
+    System.out.println(a.head.next.next.next.next.next.item);
+    System.out.println(a.head.next.next.next.next.next.next.item);
+    System.out.println(a.head.prev.item);
+    System.out.println(a.head.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.prev.prev.item);
+    System.out.println(a.head.prev.prev.prev.prev.prev.prev.item);
+    System.out.println("Size is: " + a.length());
+    System.out.println("****************************************************");
+    a.insertBefore(0, a.head.next);
+    System.out.println(a.toString());
+    a.insertBefore(1.5, a.head.next.next.next);
+    System.out.println(a.toString());
+    a.insertAfter(6, a.head.prev);
+    System.out.println(a.toString());
+    a.insertAfter(4.5, a.head.prev.prev.prev);
+    System.out.println(a.toString());
+    a.remove(a.head.next);
+    System.out.println(a.toString());
+    a.remove(a.head.prev);
+    System.out.println(a.toString());
+    System.out.println("****************************************************");
+    a.remove(a.head.prev);
+    System.out.println(a.toString());
+    a.remove(a.head.prev);
+    System.out.println("Size is: " + a.length());
+    System.out.println(a.toString());
+    a.remove(a.head.prev.prev.prev);
+    System.out.println("Size is: " + a.length());
+    System.out.println(a.toString());
+    DList b = new DList();
+    b.insertBack(10);
+    b.insertBack(11);
+    b.insertBack(12);
+    b.insertBack(13);
+    b.insertBack(14);
+    b.insertBack(15);
+    System.out.println("Size is: " + b.length());
+    System.out.println(b.toString());
+    b.remove(b.head.next.next.next);
+    System.out.println("Size is: " + b.length());
+    System.out.println(b.toString());
+    b.remove(b.head.next);
+    System.out.println("Size is: " + b.length());
+    System.out.println(b.toString());
+    b.remove(b.head.prev);
+    System.out.println("Size is: " + b.length());
+    System.out.println(b.toString());
+    System.out.println("****************************************************");
+    LockDList c = new LockDList();
+    c.insertBack(1);
+    c.insertBack(2);
+    c.insertBack(3);
+    System.out.println(c.toString());
+    c.lockNode(c.head.next.next);
+    c.remove(c.head.next.next);
+    System.out.println(c.toString());
+    c.remove(c.head.next);
+    System.out.println(c.toString());
+    
+}
+    
+
   /**
    *  head references the sentinel node.
    *  size is the number of items in the list.  (The sentinel node does not
@@ -51,6 +150,8 @@ public class DList {
    *  DList() constructor for an empty DList.
    */
   public DList() {
+    head = newNode(null, this.head, this.head);
+    size = 0;
     //  Your solution here.
   }
 
@@ -78,6 +179,16 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public void insertFront(Object item) {
+    if (isEmpty()){
+      DListNode frontNode = newNode(item, head, head);
+      head.prev = frontNode;
+      head.next = frontNode;
+    } else {
+      DListNode frontNode = newNode(item, head, front());
+      front().prev = frontNode;
+      head.next = frontNode;
+    }
+    size++;
     // Your solution here.
   }
 
@@ -87,6 +198,16 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public void insertBack(Object item) {
+    if (isEmpty()){
+      DListNode backNode = newNode(item, head, head);
+      head.prev = backNode;
+      head.next = backNode;
+    } else {
+      DListNode backNode = newNode(item, back(), head);
+      back().next = backNode;
+      head.prev = backNode;
+    }
+    size++;
     // Your solution here.
   }
 
@@ -100,6 +221,11 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public DListNode front() {
+    if (isEmpty()){
+      return null;
+    } else {
+      return next(head);
+    }
     // Your solution here.
   }
 
@@ -113,6 +239,11 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public DListNode back() {
+    if (isEmpty()){
+      return null;
+    } else {
+      return prev(head);
+    }
     // Your solution here.
   }
 
@@ -127,6 +258,11 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public DListNode next(DListNode node) {
+    if (node == null || node.next == head){
+      return null;
+    } else {
+      return node.next;
+    }
     // Your solution here.
   }
 
@@ -141,6 +277,11 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public DListNode prev(DListNode node) {
+    if (node == null || node.prev == head){
+      return null;
+    } else {
+      return node.prev;
+    }
     // Your solution here.
   }
 
@@ -152,6 +293,18 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public void insertAfter(Object item, DListNode node) {
+    if (node == null){
+      return;
+    } else if (node == back()){
+      insertBack(item);
+      return;
+    } else {
+      DListNode afterNode = newNode(item, node, next(node));
+      node.next = afterNode;
+      next(node).prev = afterNode;
+      size++;
+      return;
+    }
     // Your solution here.
   }
 
@@ -163,6 +316,18 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public void insertBefore(Object item, DListNode node) {
+    if (node == null){
+      return;
+    } else if (node == front()){
+      insertFront(item);
+      return;
+    } else {
+      DListNode beforeNode = newNode(item, prev(node), node);
+      prev(node).next = beforeNode;
+      node.prev = beforeNode;
+      size++;
+      return;
+    }
     // Your solution here.
   }
 
@@ -171,6 +336,24 @@ public class DList {
    *  Performance:  runs in O(1) time.
    */
   public void remove(DListNode node) {
+    if (node == null){
+      return;
+    } else if (node == front()){      //remove front
+      next(node).prev = head;
+      head.next = next(node);
+      size--;
+      return;
+    } else if (node == back()){       //remove back
+      prev(node).next = head;
+      head.prev = prev(node);
+      size--;
+      return;
+    } else {
+      next(node).prev = prev(node);
+      prev(node).next = next(node);
+      size--;
+      return;
+    }        
     // Your solution here.
   }
 
